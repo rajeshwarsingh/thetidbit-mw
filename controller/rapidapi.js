@@ -29,7 +29,7 @@ const getCategoryNews = async (req, res) => {
 
           return res.send(db);
       }).catch(function (error) {
-        res.status(400).send({error: response.error})
+        res.status(400).send({error: error})
       });
 };
 
@@ -62,7 +62,7 @@ const getSearchedNews = async (req, res) => {
 
           return res.send(db);
       }).catch(function (error) {
-        res.status(400).send({error: response.error})
+        res.status(400).send({error: error})
       });
 };
 
@@ -77,7 +77,6 @@ const getTrendingNews = async (req, res) => {
 
         
         let db = response.data.articles.map(news => {
-          console.log(news)
             let {  title = '', url = '',urlToImage='', description = '' } = news
              return {
                title,
@@ -88,10 +87,8 @@ const getTrendingNews = async (req, res) => {
           });
 
           
-          console.log("@@@@: ",db)
           return res.send(db);
       }).catch(function (error) {
-        console.log(error)
         res.status(400).send({error: error})
       });
 };
