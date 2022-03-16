@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(cors({
-  origin: 'http://www.thetidbit.in'
+  origin: ['https://thetidbit.in', 'https://thetidbit.in/','https://www.thetidbit.in/','http://www.thetidbit.in/','http://thetidbit.in/']
 }));
 app.use(logger('dev'));
 app.use(express.json());
