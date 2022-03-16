@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const rapidapiControlle = require('../controller/rapidapi')
-const newsapiControlle = require('../controller/rapidapi')
+const newsapiControlle = require('../controller/newsapi')
 const config = require('../config')
 const { apiProvide } = config
 
