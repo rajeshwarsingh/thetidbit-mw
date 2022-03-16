@@ -10,7 +10,7 @@ const getCategoryNews = async (req, res) => {
         let db = response.data.articles.map(news => {
             let {  title = '', url = '',urlToImage='', description = '' } = news
              return {
-               title,
+               name:title,
               url:  urlToImage,
               description,
               link: url
@@ -37,7 +37,7 @@ const getSearchedNews = async (req, res) => {
         let db = response.data.articles.map(news => {
             let {  title = '', url = '',urlToImage='', description = '' } = news
              return {
-               title,
+                name:title,
               url:  urlToImage,
               description,
               link: url
@@ -64,7 +64,7 @@ const getTrendingNews = async (req, res) => {
         let db = response.data.articles.map(news => {
             let {  title = '', url = '',urlToImage='', description = '' } = news
              return {
-               title,
+                name:title,
               url:  urlToImage,
               description,
               link: url
