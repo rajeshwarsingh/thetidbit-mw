@@ -1,7 +1,6 @@
 var axios = require("axios").default;
 
 const getCategoryNews = async (req, res) => {
-    alert(1)
 
     var options = {
         method: 'GET',
