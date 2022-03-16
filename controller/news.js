@@ -14,8 +14,20 @@ const getCategoryNews = async (req, res) => {
       };
       
       axios.request(options).then(function (response) {
-        //   console.log(response.data);
-          return res.send(response.data);
+        let db = response.data.value.map(news => {
+            let { name = '', url = '', description = '' } = news
+            let thumbnailUrl = news.provider.length && news.provider[0].image && news.provider[0].image.thumbnail ? news.provider[0].image.thumbnail.contentUrl : ''
+            return {
+              name,
+              url: thumbnailUrl,
+              description,
+              link: url
+            }
+          });
+
+          
+
+          return res.send(db);
       }).catch(function (error) {
         res.status(400).send({error: response.error})
       });
@@ -35,8 +47,20 @@ const getSearchedNews = async (req, res) => {
       };
       
       axios.request(options).then(function (response) {
-        //   console.log(response.data);
-          return res.send(response.data);
+        let db = response.data.value.map(news => {
+            let { name = '', url = '', description = '' } = news
+            let thumbnailUrl = news.provider.length && news.provider[0].image && news.provider[0].image.thumbnail ? news.provider[0].image.thumbnail.contentUrl : ''
+            return {
+              name,
+              url: thumbnailUrl,
+              description,
+              link: url
+            }
+          });
+
+          
+
+          return res.send(db);
       }).catch(function (error) {
         res.status(400).send({error: response.error})
       });
@@ -56,8 +80,20 @@ const getTrendingNews = async (req, res) => {
       };
       
       axios.request(options).then(function (response) {
-        //   console.log(response.data);
-          return res.send(response.data);
+        let db = response.data.value.map(news => {
+            let { name = '', url = '', description = '' } = news
+            let thumbnailUrl = news.provider.length && news.provider[0].image && news.provider[0].image.thumbnail ? news.provider[0].image.thumbnail.contentUrl : ''
+            return {
+              name,
+              url: thumbnailUrl,
+              description,
+              link: url
+            }
+          });
+
+          
+
+          return res.send(db);
       }).catch(function (error) {
         res.status(400).send({error: response.error})
       });
