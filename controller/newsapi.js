@@ -6,7 +6,7 @@ const { newsapiKey } = config
 const getCategoryNews = async (req, res) => {
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=5`
+    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
   };
 
 
@@ -45,7 +45,7 @@ const getSearchedNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=5`
+    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=30`
   };
 
   axios.request(options).then(function (response) {
@@ -84,7 +84,7 @@ const getTrendingNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=5`,
+    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=30`,
   };
 
   axios.request(options).then(function (response) {
