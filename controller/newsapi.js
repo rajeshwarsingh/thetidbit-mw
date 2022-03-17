@@ -1,10 +1,12 @@
 var axios = require("axios").default;
 const translateData = require('./googleTranslate')
+const config = require('../config')
+const { newsapiKey } = config
 
 const getCategoryNews = async (req, res) => {
   var options = {
     method: 'GET',
-    url: 'https://newsapi.org/v2/top-headlines?country=in&apiKey=dee373b831964dfdb34259a56efbf20b&pageSize=5'
+    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=5`
   };
 
 
@@ -43,7 +45,7 @@ const getSearchedNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/everything?q=sport&apiKey=dee373b831964dfdb34259a56efbf20b&pageSize=5`
+    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=5`
   };
 
   axios.request(options).then(function (response) {
@@ -82,7 +84,7 @@ const getTrendingNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=dee373b831964dfdb34259a56efbf20b&pageSize=5',
+    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=5`,
   };
 
   axios.request(options).then(function (response) {
