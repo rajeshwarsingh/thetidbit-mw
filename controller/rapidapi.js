@@ -24,9 +24,7 @@ const getCategoryNews = async (req, res) => {
               link: url
             }
           });
-
           
-
           return res.send(db);
       }).catch(function (error) {
         res.status(400).send({error: error})
