@@ -4,16 +4,67 @@ const translateData = require('./googleTranslate')
 const config = require('../config')
 const { newsapiKey, isCache } = config
 
+// -----------------getCategoryNews------------
+
 const getCategoryNewsCached = async (req, res) => {
 
   // CHECK FOR NEWS LANGUAGE 
+  return await handleCachedMethod(req, res,'category')
+
+};
+
+const getSearchedNewsCached = async (req, res) => {
+
+  // CHECK FOR NEWS LANGUAGE 
+  return await handleCachedMethod(req, res, 'search')
+
+};
+
+const getTrendingNewsCached = async (req, res) => {
+
+  // CHECK FOR NEWS LANGUAGE 
+  return await handleCachedMethod(req, res, 'trending')
+
+};
+
+// -----------------getCategoryNews------------
+const getFileName= (apiType, fileType, lang)=>{
+  let file = ''
+  if (apiType === 'category' && fileType === 'datefile' && lang!=='hi') { //category
+    file = 'getCategoryNews_lastTime.json'
+  } else if (apiType === 'category' && fileType === 'datefile' && lang==='hi') {
+    file = 'getCategoryNews_hi_lastTime.json'
+  } else if (apiType === 'category' && fileType === 'datafile' && lang!=='hi') {
+    file = 'getCategoryNews.json'
+  } else if (apiType === 'category' && fileType === 'datafile' && lang==='hi') {
+    file = 'getCategoryNews_hi.json'
+  } else if (apiType === 'search' && fileType === 'datefile' && lang!=='hi') { // search
+    file = 'getSearchNews_lastTime.json'
+  } else if (apiType === 'search' && fileType === 'datefile' && lang==='hi') {
+    file = 'getSearchNews_hi_lastTime.json'
+  } else if (apiType === 'search' && fileType === 'datafile' && lang!=='hi') {
+    file = 'getSearchNews.json'
+  } else if (apiType === 'search' && fileType === 'datafile' && lang==='hi') {
+    file = 'getSearchNews_hi.json'
+  } else if (apiType === 'trending' && fileType === 'datefile' && lang!=='hi') {// trending
+    file = 'getTrendingNews_lastTime.json'
+  } else if (apiType === 'trending' && fileType === 'datefile' && lang==='hi') {
+    file = 'getTrendingNews_hi_lastTime.json'
+  } else if (apiType === 'trending' && fileType === 'datafile' && lang!=='hi') {
+    file = 'getTrendingNews.json'
+  } else if (apiType === 'trending' && fileType === 'datafile' && lang==='hi') {
+    file = 'getTrendingNews_hi.json'
+  } else {
+    console.log('type fot available:')
+  }
+  return file
+}
+const handleCachedMethod = async (req, res, apiType) => {
+
+  // CHECK FOR NEWS LANGUAGE 
   const lang = req.query.lang
-    let dateFilename = 'getCategoryNews_lastTime.json'
-    let newsDataFilename = 'getCategoryNews.json'
-    if (lang === 'hi'){
-       dateFilename = 'getCategoryNewsHindi_lastTime.json'
-     newsDataFilename = 'getCategoryNewsHindi.json'
-    }
+    let dateFilename = getFileName(apiType, 'datefile', lang)
+    let newsDataFilename = getFileName(apiType, 'datafile', lang)
 
   // CHECK FILES EXIST
   if (fs.existsSync(`./${dateFilename}`) && fs.existsSync(`./${newsDataFilename}`)) {
@@ -26,8 +77,8 @@ const getCategoryNewsCached = async (req, res) => {
     var currentDate = new Date();
     var Difference_In_Time = currentDate.getTime() - savedDate.getTime();
     let diffhours = (Difference_In_Time / (1000 * 60 * 60))
-    if (diffhours > 8) { // CHECK FILE DATA EXPIRE 
-      let finalResult = await handleNewRequest(dateFilename, newsDataFilename, lang)
+    if (diffhours > 12) { // CHECK FILE DATA EXPIRE 
+      let finalResult = await handleNewRequest(dateFilename, newsDataFilename, lang,apiType)
       return res.send(finalResult)
     } else { // NOT EXPIRED
 
@@ -39,18 +90,28 @@ const getCategoryNewsCached = async (req, res) => {
 
   }// FILE NOT EXIST
   else {
-    let finalResult = await handleNewRequest(dateFilename, newsDataFilename,lang)
+    let finalResult = await handleNewRequest(dateFilename, newsDataFilename,lang, apiType)
     return res.send(finalResult)
   }
 
 };
 
-const handleNewRequest = async (dateFilename, newsDataFilename, lang) => {
+// ---------------new Request----------------------------------
+const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType) => {
   // CALL API AND UPDATE RESPONSE IN FILE
-  let apiData = await callCategoryApi(lang)
+  let apiData;
+  if(apiType==='category'){
+    apiData = await callCategoryApi(lang)
+  }else if(apiType==='search'){
+    apiData = await callSearchedApi(lang)
+  }else if(apiType==='trending'){
+    apiData = await callTrendingApi(lang)
+  }else{
+    console.log('*************************************: api type not found')
+  }
 
   let apiDataForFile = JSON.stringify(apiData)
-  if (fs.existsSync(`./${newsDataFilename}`)) fs.unlinkSync(`./${newsDataFilename}`)
+  if (fs.existsSync(`./${newsDataFilename}`)) await fs.unlinkSync(`./${newsDataFilename}`)
   fs.writeFileSync(`./${newsDataFilename}`, apiDataForFile, { flag: 'wx' })
 
   // CREATE FILE
@@ -61,8 +122,10 @@ const handleNewRequest = async (dateFilename, newsDataFilename, lang) => {
   return apiData
 }
 
+// -------------------------------------------------------
+
+// --------------------api----------------------------
 const callCategoryApi = async (lang) => {
-  console.log("@@@@@@@@@@@@@@@@@@@@@@@@", lang)
   var options = {
     method: 'GET',
     url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
@@ -86,41 +149,59 @@ const callCategoryApi = async (lang) => {
   return newsData
 }
 
-const getCategoryNews_api = async (req, res) => {
+const callSearchedApi = async (lang) => {
+  // const { q } = req.query
+
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
+    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=30`
   };
 
+  let response = await axios.request(options);
 
-  axios.request(options).then(function (response) {
-    let db = response.data.articles.map(news => {
-      let { title = '', url = '', urlToImage = '', description = '' } = news
-      return {
-        name: title,
-        url: urlToImage,
-        description,
-        link: url
-      }
-    });
-
-
-
-    // -------------------rnd------------------------
-    const fs = require('fs')
-    let content = JSON.stringify(db)
-    // const content = 'Some hguguy content!'
-    fs.unlink('./testresponse.json', (err) => {
-      if (err) throw err;
-      console.log('path/file.txt was deleted');
-    });
-
-    // condition end for language support
-  }).catch(function (error) {
-    res.status(400).send({ error: error })
+  let newsData = response.data.articles.map(news => {
+    let { title = '', url = '', urlToImage = '', description = '' } = news
+    return {
+      name: title,
+      url: urlToImage,
+      description,
+      link: url
+    }
   });
-};
 
+  if (lang === 'hi') {
+    return await translateData(newsData)
+  }
+  return newsData
+}
+
+const callTrendingApi = async (lang) => {
+  var options = {
+    method: 'GET',
+    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=30`,
+  };
+
+  let response = await axios.request(options);
+
+  let newsData = response.data.articles.map(news => {
+    let { title = '', url = '', urlToImage = '', description = '' } = news
+    return {
+      name: title,
+      url: urlToImage,
+      description,
+      link: url
+    }
+  });
+
+  if (lang === 'hi') {
+    return await translateData(newsData)
+  }
+  return newsData
+}
+
+
+// --------------------------------------------
+// -----------------getCategoryNews------------
 let getCategoryNews = async (req, res) => {
   var options = {
     method: 'GET',
@@ -158,7 +239,7 @@ let getCategoryNews = async (req, res) => {
   });
 };
 
-const getSearchedNews = async (req, res) => {
+let getSearchedNews = async (req, res) => {
   const { q } = req.query
 
   var options = {
@@ -198,7 +279,7 @@ const getSearchedNews = async (req, res) => {
   });
 };
 
-const getTrendingNews = async (req, res) => {
+let getTrendingNews = async (req, res) => {
 
   var options = {
     method: 'GET',
@@ -239,8 +320,9 @@ const getTrendingNews = async (req, res) => {
 };
 
 if(isCache){
-  console.log('isCache:',isCache)
   getCategoryNews = getCategoryNewsCached;
+  getSearchedNews = getSearchedNewsCached;
+  getTrendingNews = getTrendingNewsCached;
 }
 
 module.exports = { getCategoryNews, getSearchedNews, getTrendingNews }
