@@ -24,6 +24,7 @@ let getStockUpdate = async (req, res) => {
       }) 
     }else{
       return res.send({
+        "stockName":'IBM',
         "open": '000',
          "high": "000",
          "low": '000',
