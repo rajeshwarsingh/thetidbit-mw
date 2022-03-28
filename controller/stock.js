@@ -16,6 +16,7 @@ let getStockUpdate = async (req, res) => {
       let key = Object.keys(response.data['Time Series (5min)'])[0]
       let data =response.data['Time Series (5min)'][key]
       return res.send({
+        "stockName":'IBM',
        "open": data["1. open"],
         "high": data["2. high"],
         "low": data["3. low"],
