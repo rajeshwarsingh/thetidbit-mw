@@ -28,9 +28,39 @@ const getTrendingNewsCached = async (req, res) => {
 };
 
 // -----------------getCategoryNews------------
-const getFileName= (apiType, fileType, lang)=>{
+const getFileName= (apiType, fileType, lang, category)=>{
   let file = ''
-  if (apiType === 'category' && fileType === 'datefile' && lang!=='hi') { //category
+  
+  if (apiType === 'category' && fileType === 'datefile' && category==='general') { //category
+    file = 'getCategoryNews_general_lastTime.json'
+  } else if (apiType === 'category' && fileType === 'datefile' && category==='business') {
+    file = 'getCategoryNews_business_lastTime.json'
+  }
+  else if (apiType === 'category' && fileType === 'datefile' && category==='technology') {
+    file = 'getCategoryNews_technology_lastTime.json'
+  }
+  else if (apiType === 'category' && fileType === 'datefile' && category==='entertainment') {
+    file = 'getCategoryNews_entertainment_lastTime.json'
+  }
+  else if (apiType === 'category' && fileType === 'datefile' && category==='sports') {
+    file = 'getCategoryNews_sports_lastTime.json'
+  }
+  else if (apiType === 'category' && fileType === 'datafile' && category==='general') {
+    file = 'getCategoryNewsGeneral.json'
+  }
+  else if (apiType === 'category' && fileType === 'datafile' && category==='business') {
+    file = 'getCategoryNewsBusiness.json'
+  }
+  else if (apiType === 'category' && fileType === 'datafile' && category==='technology') {
+    file = 'getCategoryNewsTechnology.json'
+  }
+  else if (apiType === 'category' && fileType === 'datafile' && category==='entertainment') {
+    file = 'getCategoryNewsEntertainment.json'
+  }
+  else if (apiType === 'category' && fileType === 'datafile' && category==='sports') {
+    file = 'getCategoryNewsSports.json'
+  }
+  else if (apiType === 'category' && fileType === 'datefile' && lang!=='hi') { //category
     file = 'getCategoryNews_lastTime.json'
   } else if (apiType === 'category' && fileType === 'datefile' && lang==='hi') {
     file = 'getCategoryNews_hi_lastTime.json'
@@ -64,8 +94,8 @@ const handleCachedMethod = async (req, res, apiType) => {
   // CHECK FOR NEWS LANGUAGE 
   const lang = req.query.lang
   const category = req.query.q
-    let dateFilename = getFileName(apiType, 'datefile', lang)
-    let newsDataFilename = getFileName(apiType, 'datafile', lang)
+    let dateFilename = getFileName(apiType, 'datefile', lang, category)
+    let newsDataFilename = getFileName(apiType, 'datafile', lang, category)
 
   // CHECK FILES EXIST
   if (fs.existsSync(`./${dateFilename}`) && fs.existsSync(`./${newsDataFilename}`)) {
