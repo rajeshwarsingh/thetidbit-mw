@@ -7,7 +7,6 @@ const { newsapiKey, isCache } = config
 // -----------------getCategoryNews------------
 
 const getCategoryNewsCached = async (req, res) => {
-console.log("getCategoryNewsCached :")
   // CHECK FOR NEWS LANGUAGE 
   return await handleCachedMethod(req, res,'category')
 
@@ -157,12 +156,10 @@ const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType, c
 
 // --------------------api----------------------------
 const callCategoryApi = async (lang,category) => {
-  console.log("******************", lang,category)
   let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
   if(category){
     url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30&category=${category}`
   }
-  console.log("##################",url)
   var options = {
     method: 'GET',
     url: url
@@ -357,7 +354,6 @@ let getTrendingNews = async (req, res) => {
 };
 
 if(isCache){
-  console.log('check here:',isCache)
   getCategoryNews = getCategoryNewsCached;
   getSearchedNews = getSearchedNewsCached;
   getTrendingNews = getTrendingNewsCached;

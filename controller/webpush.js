@@ -1,7 +1,6 @@
 const fs = require('fs')
 
 const getToken = async (req, res) => {
-    console.log("aaaaaaaaaaaa")
     // CHECK FILES EXIST
     if (fs.existsSync(`./webpushData.json`)) {
         let fileData = fs.readFileSync(`./webpushData.json`, 'utf8')
@@ -21,7 +20,7 @@ const  setToken = async (req, res) => {
             fileData = JSON.parse(fileData)
 
             // check token alrady exist
-            console.log(fileData.filter(item=>(item.token===token)).length )
+            // console.log(fileData.filter(item=>(item.token===token)).length )
             if((fileData.filter(item=>(item.token===token))).length>0){
                 return res.send('token already exist')
             }else{
