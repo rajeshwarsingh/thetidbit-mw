@@ -7,7 +7,7 @@ const { newsapiKey, isCache } = config
 // -----------------getCategoryNews------------
 
 const getCategoryNewsCached = async (req, res) => {
-
+console.log("getCategoryNewsCached :")
   // CHECK FOR NEWS LANGUAGE 
   return await handleCachedMethod(req, res,'category')
 
@@ -63,6 +63,7 @@ const handleCachedMethod = async (req, res, apiType) => {
 
   // CHECK FOR NEWS LANGUAGE 
   const lang = req.query.lang
+  const category = req.query.q
     let dateFilename = getFileName(apiType, 'datefile', lang)
     let newsDataFilename = getFileName(apiType, 'datafile', lang)
 
@@ -78,7 +79,7 @@ const handleCachedMethod = async (req, res, apiType) => {
     var Difference_In_Time = currentDate.getTime() - savedDate.getTime();
     let diffhours = (Difference_In_Time / (1000 * 60 * 60))
     if (diffhours > 12) { // CHECK FILE DATA EXPIRE 
-      let finalResult = await handleNewRequest(dateFilename, newsDataFilename, lang,apiType)
+      let finalResult = await handleNewRequest(dateFilename, newsDataFilename, lang,apiType, category)
       return res.send(finalResult)
     } else { // NOT EXPIRED
 
@@ -90,18 +91,18 @@ const handleCachedMethod = async (req, res, apiType) => {
 
   }// FILE NOT EXIST
   else {
-    let finalResult = await handleNewRequest(dateFilename, newsDataFilename,lang, apiType)
+    let finalResult = await handleNewRequest(dateFilename, newsDataFilename,lang, apiType, category)
     return res.send(finalResult)
   }
 
 };
 
 // ---------------new Request----------------------------------
-const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType) => {
+const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType, category) => {
   // CALL API AND UPDATE RESPONSE IN FILE
   let apiData;
   if(apiType==='category'){
-    apiData = await callCategoryApi(lang)
+    apiData = await callCategoryApi(lang, category)
   }else if(apiType==='search'){
     apiData = await callSearchedApi(lang)
   }else if(apiType==='trending'){
@@ -125,10 +126,16 @@ const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType) =
 // -------------------------------------------------------
 
 // --------------------api----------------------------
-const callCategoryApi = async (lang) => {
+const callCategoryApi = async (lang,category) => {
+  console.log("******************", lang,category)
+  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
+  if(category){
+    url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30&category=${category}`
+  }
+  console.log("##################",url)
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
+    url: url
   };
 
   let response = await axios.request(options);
@@ -320,6 +327,7 @@ let getTrendingNews = async (req, res) => {
 };
 
 if(isCache){
+  console.log('check here:',isCache)
   getCategoryNews = getCategoryNewsCached;
   getSearchedNews = getSearchedNewsCached;
   getTrendingNews = getTrendingNewsCached;
