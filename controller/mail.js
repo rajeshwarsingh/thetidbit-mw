@@ -78,7 +78,7 @@ const  sentFeedbackEmail = async (req, res) => {
 
         let mailDetails = {
             from: 'info@thetidbit.in',
-            to: 'rajan23024@gmail.com,thetidbitcompany@gmail.com',
+            to: 'rajan23024@gmail.com,thetidbitcompany@gmail.com,rohityadav1221@gmail.com',
             subject:"THETIDBIT- Feedback from contact us",
             html: `<html><body><table><tr><td>Full Name</td><td>Email</td><td>Message</td></tr><tr><td>${fullname}</td><td>${email}</td><td>${message}</td></tr><table></body></html>`
         };
