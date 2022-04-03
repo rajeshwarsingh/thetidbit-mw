@@ -67,5 +67,35 @@ const  sentEmail = async (req, res) => {
     return res.send({msg:"mail not found in data param"})
 };
 
+const  sentFeedbackEmail = async (req, res) => {
 
-module.exports = { sentEmail }
+    if(req.body.email && req.body.message){
+        let fullname = req.body.fullname
+        let email = req.body.email
+        let message = req.body.message
+
+        let mailTransporter = nodemailer.createTransport(mailerConfig.godaddy);
+
+        let mailDetails = {
+            from: 'info@thetidbit.in',
+            to: 'rajan23024@gmail.com,thetidbitcompany@gmail.com',
+            subject:"THETIDBIT- Feedback from contact us",
+            html: `<html><body><table><tr><td>Full Name</td><td>Email</td><td>Message</td></tr><tr><td>${fullname}</td><td>${email}</td><td>${message}</td></tr><table></body></html>`
+        };
+    
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs', err);
+            } else {
+                console.log('Email sent successfully');
+                return
+            }
+        });
+    }
+
+    return res.send({msg:"mail not found in data param"})
+};
+
+
+
+module.exports = { sentEmail,sentFeedbackEmail }

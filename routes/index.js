@@ -13,6 +13,7 @@ router.get('/getToken', webpushController.getToken);
 router.get('/setToken', webpushController.setToken);
 
 router.post('/sentEmail', MailController.sentEmail);
+router.post('/sentFeedbackEmail', MailController.sentFeedbackEmail);
 
 
 
