@@ -168,12 +168,14 @@ const callCategoryApi = async (lang,category) => {
   let response = await axios.request(options);
 
   let newsData = response.data.articles.map(news => {
-    let { title = '', url = '', urlToImage = '', description = '' } = news
+    let { title = '', url = '', urlToImage = '', description = '',author='',publishedAt='' } = news
     return {
       name: title,
       url: urlToImage,
       description,
-      link: url
+      link: url,
+      author:author,
+        publishedAt:publishedAt
     }
   });
 
@@ -194,12 +196,14 @@ const callSearchedApi = async (lang) => {
   let response = await axios.request(options);
 
   let newsData = response.data.articles.map(news => {
-    let { title = '', url = '', urlToImage = '', description = '' } = news
+    let { title = '', url = '', urlToImage = '', description = '', author='', publishedAt='' } = news
     return {
       name: title,
       url: urlToImage,
       description,
-      link: url
+      link: url,
+      author:author,
+      publishedAt:publishedAt
     }
   });
 
@@ -218,12 +222,14 @@ const callTrendingApi = async (lang) => {
   let response = await axios.request(options);
 
   let newsData = response.data.articles.map(news => {
-    let { title = '', url = '', urlToImage = '', description = '' } = news
+    let { title = '', url = '', urlToImage = '', description = '',author='',publishedAt='' } = news
     return {
       name: title,
       url: urlToImage,
       description,
-      link: url
+      link: url,
+      publishedAt:publishedAt,
+      author:author
     }
   });
 
@@ -245,12 +251,14 @@ let getCategoryNews = async (req, res) => {
 
   axios.request(options).then(function (response) {
     let db = response.data.articles.map(news => {
-      let { title = '', url = '', urlToImage = '', description = '' } = news
+      let { title = '', url = '', urlToImage = '', description = '',author='', publishedAt='' } = news
       return {
         name: title,
         url: urlToImage,
         description,
-        link: url
+        link: url,
+        author:author,
+        publishedAt:publishedAt
       }
     });
 
@@ -284,12 +292,14 @@ let getSearchedNews = async (req, res) => {
   axios.request(options).then(function (response) {
 
     let db = response.data.articles.map(news => {
-      let { title = '', url = '', urlToImage = '', description = '' } = news
+      let { title = '', url = '', urlToImage = '', description = '', author='', publishedAt=''} = news
       return {
         name: title,
         url: urlToImage,
         description,
-        link: url
+        link: url,
+        author:author,
+      publishedAt:publishedAt
       }
     });
 
@@ -324,12 +334,14 @@ let getTrendingNews = async (req, res) => {
 
 
     let db = response.data.articles.map(news => {
-      let { title = '', url = '', urlToImage = '', description = '' } = news
+      let { title = '', url = '', urlToImage = '', description = '',author='',publishedAt='' } = news
       return {
         name: title,
         url: urlToImage,
         description,
-        link: url
+        link: url,
+        author:author,
+        publishedAt:publishedAt
       }
     });
 
