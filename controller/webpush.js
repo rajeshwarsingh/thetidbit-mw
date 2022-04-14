@@ -1,7 +1,19 @@
 const fs = require('fs')
+const AndroidTOken =  require('../model/notification')
 
 const getToken = async (req, res) => {
-    // CHECK FILES EXIST
+    let platform =req.query.platform
+    console.log('step1 ')
+    if(platform === 'android'){
+        AndroidTOken.find().exec((err, token) => {
+            if (err) { return next(err); }
+            if (!token) { return res.status(400).send({ error: "Cant get feedbacks of non-existing employee"}); }
+            // const { requiringFeedbacks, submittedFeedbacks } = employee;
+            return res.json({ token });
+        })
+
+    }else{
+        // CHECK FILES EXIST
     if (fs.existsSync(`./webpushData.json`)) {
         let fileData = fs.readFileSync(`./webpushData.json`, 'utf8')
         fileData = JSON.parse(fileData)
@@ -9,10 +21,23 @@ const getToken = async (req, res) => {
     }else{
         res.status(400).send({msg:'data not available'})
     }
+    }
+    
 
 }
 
 const  setToken = async (req, res) => {
+    let platform =req.query.platform
+    if(platform === 'android'){
+        let token =req.query.token
+        var SaveToken = new AndroidTOken({ token });
+        SaveToken.save(function (err, book) {
+            if (err) return console.error(err);
+            console.log(book.name + " saved to bookstore collection.");
+            return res.send({msg:"Token Saved"})
+          });
+
+    }else{
     let token =req.query.token
     if(token){
         if (fs.existsSync(`./webpushData.json`)){
@@ -43,8 +68,9 @@ const  setToken = async (req, res) => {
     }else{
         return res.status(400).send({msg:'token not found!'})
     }
+    }
+    
     
 };
-
 
 module.exports = { setToken, getToken }

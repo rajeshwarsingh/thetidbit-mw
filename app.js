@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -20,6 +21,14 @@ app.set('view engine', 'jade');
 app.use(cors({
   origin: ['https://thetidbit-pushnotification--fb.firebaseapp.com/','https://thetidbit-pushnotification--fb.firebaseapp.com','https://thetidbit.in', 'https://thetidbit.in/','https://www.thetidbit.in/','http://www.thetidbit.in/','http://thetidbit.in/','http://localhost:3000','http://localhost:3000/']
 }));
+
+
+// DB Setup
+// mongoose.connect('mongodb://localhost:democompany/democompany');
+mongoose.connect("mongodb+srv://Akbar23024:Akbar23024@cluster0.hb7na.mongodb.net/thetidbit?retryWrites=true&w=majority");
+// App Setup
+
+
 // app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
