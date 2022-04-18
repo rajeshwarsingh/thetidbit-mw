@@ -1,4 +1,5 @@
 const fs = require('fs')
+var axios = require("axios").default;
 const AndroidTOken =  require('../model/notification')
 
 const getToken = async (req, res) => {
@@ -73,4 +74,46 @@ const  setToken = async (req, res) => {
     
 };
 
-module.exports = { setToken, getToken }
+const sendWPToAndroid = async(req, res)=>{
+    AndroidTOken.find().exec((err, token) => {
+        if (err) { return next(err); }
+        if (!token) { return res.status(400).send({ error: "Cant get feedbacks of non-existing employee"}); }
+
+        token.forEach(async(item)=>{
+            _sendWPToAndroid(item.token, req.body)
+        })
+
+        const newTokenArr = []
+        let arr = token.map((item)=>item.token)
+        arr.forEach(item=>{
+            if(!newTokenArr.includes(item)){
+                newTokenArr.push(item)
+            }
+        })
+
+        console.log('newTokenArr:',newTokenArr.length)
+        console.log('token:',token.length)
+        
+        
+
+        newTokenArr.forEach(async(item)=>{
+            _sendWPToAndroid(item, req.body)
+        })
+        // const { requiringFeedbacks, submittedFeedbacks } = employee;
+        // return res.json({ token });
+    })
+}
+
+
+const _sendWPToAndroid = async(token, data)=>{
+    console.log('token:')
+    data.to = token
+
+    let payload = data
+
+    console.log('check expo noti payload:',payload)
+
+    await axios.post('https://exp.host/--/api/v2/push/send', payload);
+}
+
+module.exports = { setToken, getToken, sendWPToAndroid }

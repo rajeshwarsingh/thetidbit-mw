@@ -156,9 +156,9 @@ const handleNewRequest = async (dateFilename, newsDataFilename, lang, apiType, c
 
 // --------------------api----------------------------
 const callCategoryApi = async (lang,category) => {
-  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
+  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=60`
   if(category){
-    url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30&category=${category}`
+    url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=60&category=${category}`
   }
   var options = {
     method: 'GET',
@@ -190,7 +190,7 @@ const callSearchedApi = async (lang) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=30`
+    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=60`
   };
 
   let response = await axios.request(options);
@@ -216,7 +216,7 @@ const callSearchedApi = async (lang) => {
 const callTrendingApi = async (lang) => {
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=30`,
+    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=60`,
   };
 
   let response = await axios.request(options);
@@ -245,7 +245,7 @@ const callTrendingApi = async (lang) => {
 let getCategoryNews = async (req, res) => {
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=30`
+    url: `https://newsapi.org/v2/top-headlines?country=in&apiKey=${newsapiKey}&pageSize=60`
   };
 
 
@@ -286,7 +286,7 @@ let getSearchedNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=30`
+    url: `https://newsapi.org/v2/everything?q=sport&apiKey=${newsapiKey}&pageSize=60`
   };
 
   axios.request(options).then(function (response) {
@@ -327,7 +327,7 @@ let getTrendingNews = async (req, res) => {
 
   var options = {
     method: 'GET',
-    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=30`,
+    url: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsapiKey}&pageSize=60`,
   };
 
   axios.request(options).then(function (response) {

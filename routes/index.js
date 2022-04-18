@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
 router.get('/getToken', webpushController.getToken);
 
 router.get('/setToken', webpushController.setToken);
+router.post('/sendPushNotiAndroid', webpushController.sendWPToAndroid);
 
 router.post('/sentEmail', MailController.sentEmail);
 router.post('/sentFeedbackEmail', MailController.sentFeedbackEmail);
